@@ -2,74 +2,415 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>hanabi2g4 的博客</title>
 <style>
 :root{
-  --bg:#ffffff; --text:#222; --card:#f7f7f7; --border:#e0e0e0; --primary:#3474e6;
+  --bg:#fafafa;
+  --text:#1a1a1a;
+  --text-soft:#666;
+  --card:#ffffff;
+  --border:#eaeaea;
+  --primary:#6366f1;
+  --primary-soft:#eef2ff;
+  --shadow:0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-hover:0 4px 8px rgba(0,0,0,0.06), 0 12px 32px rgba(99,102,241,0.12);
 }
 [data-theme="dark"]{
-  --bg:#161b22; --text:#e8e8e8; --card:#21262d; --border:#373e47; --primary:#58a6ff;
+  --bg:#0f1115;
+  --text:#e6e6e6;
+  --text-soft:#9aa0a6;
+  --card:#1a1d23;
+  --border:#2a2e36;
+  --primary:#818cf8;
+  --primary-soft:#1e1b4b;
+  --shadow:0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+  --shadow-hover:0 4px 8px rgba-ui(0,0,0,0.4), 0 12px 32px rgba(129,140,248,0.15);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
 body{
-  background:var(--bg); color:var(--text);
-  font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
-  line-height:1.8; transition:background 0.3s,color 0.3s;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system,sans-serif;
+  line-height:1.75;
+  transition:background .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
 }
+
+/* 顶部导航 */
 header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  background:color-mix(in srgb, var(--bg) 80%, transparent);
   border-bottom:1px solid var(--border);
-  padding:20px max(16px,calc((100% - 860px)/2));
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+  padding:16px max(20px,calc((100% - 780px)/2));
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
 }
-.blog-title{font-size:22px; font-weight:700; color:var(--primary);}
-nav{display:flex; gap:14px; align-items:center;}
-nav a{color:var(--text); text-decoration:none; font-size:15px;}
-nav a:hover{color:var(--primary);}
+.blog-title{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  background:linear-gradient(135deg,var(--primary),#a855f7);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+nav{display:flex;gap:8px;align-items:center;}
+nav a{
+  color:var(--text-soft);
+  text-decoration:none;
+  font-size:14px;
+  padding:6px 12px;
+  border-radius:8px;
+  transition:.2s;
+}
+nav a:hover{color:var(--primary);background:var(--primary-soft);}
 #themeBtn{
-  border:1px solid var(--border); background:var(--card); color:var(--text);
-  padding:6px 12px; border-radius:8px; cursor:pointer; font-size:14px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text-soft);
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  transition:.2s;
 }
-.container{max-width:860px; margin:40px auto; padding:0 16px;}
+#themeBtn:hover{color:var(--primary);border-color:var(--primary);}
+
+/* 主容器 */
+.container{
+  max-width:780px;
+  margin:56px auto;
+  padding:0 20px;
+}
+
+/* 页面标题 */
+.page-header{margin-bottom:40px;}
+.page-header h1{
+  font-size:32px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  margin-bottom:8px;
+}
+.page-header p{
+  color:var(--text-soft);
+  font-size:15px;
+}
+
+/* 文章卡片 */
 .article-card{
-  background:var(--card); border:1px solid var(--border);
-  padding:22px; border-radius:12px; margin-bottom:18px;
-  cursor:pointer; transition:transform .2s,border-color .2s;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:26px 28px;
+  margin-bottom:16px;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
 }
-.article-card:hover{transform:translateY(-3px); border-color:var(--primary);}
-.article-card h3{font-size:19px; margin-bottom:6px;}
-.article-date{font-size:13px; opacity:.65; margin-bottom:8px;}
-.article-summary{font-size:15px; opacity:.85;}
+.article-card::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,var(--primary),#a855f7);
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:transform .3s;
+}
+.article-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-hover);
+  border-color:color-mix(in srgb, var(--primary) 40%, var(--border));
+}
+.article-card:hover::before{transform:scaleY(1);}
+.article-card h3{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:6px;
+  letter-spacing:-0.01em;
+  transition:color .2s;
+}
+.article-card:hover h3{color:var(--primary);}
+.article-date{
+  font-size:13px;
+  color:var(--text-soft);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.article-date::before{
+  content:'📅';
+  font-size:12px;
+}
+
+/* 文章详情 */
 .back-btn{
-  padding:8px 14px; border-radius:8px; border:1px solid var(--border);
-  background:var(--card); color:var(--text); cursor:pointer; margin-bottom:20px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text-soft);
+  cursor:pointer;
+  font-size:14px;
+  margin-bottom:28px;
+  transition:.2s;
+  text-decoration:none;
 }
+.back-btn:hover{color:var(--primary);border-color:var(--primary);}
+
+.post-header{margin-bottom:32px;}
+.post-header h1{
+  font-size:30px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1.3;
+  margin-bottom:12px;
+}
+.post-meta{
+  color:var(--text-soft);
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.post-meta::before{content:'📅';}
+
+.post-content{
+  font-size:16px;
+  line-height:1.85;
+}
+.post-content h1,
+.post-content h2,
+.post-content h3{
+  font-weight:700;
+  margin:32px 0 14px;
+  letter-spacing:-0.01em;
+  line-height:1.4;
+}
+.post-content h1{font-size:26px;}
+.post-content h2{font-size:22px;}
+.post-content h3{font-size:18px;}
+.post-content p{margin-bottom:16px;}
+.post-content a{color:var(--primary);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--primary) 40%, transparent);}
+.post-content a:hover{border-bottom-color:var(--primary);}
+.post-content img{
+  max-width:100%;
+  border-radius:12px;
+  margin:16px 0;
+  box-shadow:var(--shadow);
+}
+.post-content ul,.post-content ol{padding-left:24px;margin-bottom:16px;}
+.post-content li{margin-bottom:6px;}
+.post-content code{
+  background:var(--primary-soft);
+  color:var(--primary);
+  padding:2px 6px;
+  border-radius:5px;
+  font-size:0.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.post-content pre{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px;
+  overflow-x:auto;
+  margin-bottom:16px;
+}
+.post-content pre code{background:none;color:var(--text);padding:0;}
+.post-content blockquote{
+  border-left:3px solid var(--primary);
+  padding-left:16px;
+  color:var(--text-soft);
+  margin:16px 0;
+  font-style:italic;
+}
+
+/* 页脚 */
 footer{
-  text-align:center; padding:28px; margin-top:60px;
-  border-top:1px solid var(--border); font-size:13px; opacity:.6;
+  text-align:center;
+  padding:40px 20px;
+  margin-top:80px;
+  color:var(--text-soft);
+  font-size:13px;
 }
-hr{border:none; border-top:1px solid var(--border); margin:20px 0;}
-.post-content img{max-width:100%; border-radius:8px; margin:12px 0;}
-.post-content p{margin-bottom:14px;}
-.loading{opacity:.6; text-align:center; padding:40px 0;}
+footer::before{
+  content:'';
+  display:block;
+  width:40px;
+  height:3px;
+  background:linear-gradient(90deg,var(--primary),#a855f7);
+  border-radius:2px;
+  margin:0 auto 20px;
+}
+
+/* 加载 */
+.loading{
+  color:var(--text-soft);
+  text-align:center;
+  padding:60px 0;
+  font-size:14px;
+}
+.loading::after{
+  content:'';
+  display:inline-block;
+  width:12px;
+  height:12px;
+  margin-left:8px;
+  border:2px solid var(--border);
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* 空状态 */
+.empty{
+  text-align:center;
+  padding:80px 20px;
+  color:var(--text-soft);
+}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:.4;}
+
+/* 响应式 */
+@media (max-width:600px){
+  header{padding:14px 16px;}
+  .blog-title{font-size:16px;}
+  nav a{font-size:13px;padding:5px 8px;}
+  .container{margin:32px auto;padding:0 16px;}
+  .page-header h1{font-size:26px;}
+  .article-card{padding:20px 22px;}
+  .article-card h3{font-size:16px;}
+  .post-header h1{font-size:24px;}
+  .post-content{font-size:15px;}
+}
+
+/* 入场动画 */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.article-card{animation:fadeUp .4s ease backwards;}
+.article-card:nth-child(1){animation-delay:.05s;}
+.article-card:nth-child(2){animation-delay:.1s;}
+.article-card:nth-child(3){animation-delay:.15s;}
+.article-card:nth-child(4){animation-delay:.2s;}
+.article-card:nth-child(5){animation-delay:.25s;}
 </style>
 </head>
 <body>
 <header>
-  <div class="blog-title">hanabi2g4 的博客</div>
+  <div class="blog-title">hanabi2g4</div>
   <nav>
     <a href=" " onclick="showList();return false;">首页</a >
-    <button id="themeBtn">🌓 主题</button>
+    <button id="themeBtn">🌓</button>
   </nav>
 </header>
 
 <div class="container">
-  <div id="list-view">
-    <div class="loading">正在加载文章…</div>
-  </div>
+  <div id="list-view"><div class="loading">正在加载文章</div></div>
   <div id="post-view" style="display:none;"></div>
 </div>
 
-<footer>© 2026 hanabi2g4</footer>
+<footer>© 2026 hanabi2g4 · 用心记录</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+// 主题切换
+const themeBtn = document.getElementById('themeBtn');
+if (localStorage.getItem('blog_theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme','dark');
+}
+themeBtn.onclick = () => {
+  if (document.documentElement.getAttribute('data-theme') === 'dark') {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('blog_theme','light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    localStorage.setItem('blog_theme','dark');
+  }
+};
+
+// ============================================
+// 文章列表：写新文章时在这里加一行即可
+// 格式：{ path: "_posts/文件名.md", title: "标题", date: "日期" }
+// ============================================
+const posts = [
+  { path: "_posts/2026-10-04-第一篇.md", title: "第一篇博客", date: "2026-10-04" }
+];
+
+async function showList(){
+  document.getElementById('post-view').style.display='none';
+  document.getElementById('list-view').style.display='block';
+  const wrap = document.getElementById('list-view');
+  if (posts.length === 0) {
+    wrap.innerHTML = '<div class="empty"><div class="empty-icon">📝</div><p>还没有文章，去写第一篇吧</p ></div>';
+    return;
+  }
+  const sorted = [...posts].sort((a,b) => b.date.localeCompare(a.date));
+  wrap.innerHTML = `
+    <div class="page-header">
+      <h1>最近文章</h1>
+      <p>记录 · 思考 · 分享</p >
+    </div>
+    ${sorted.map(p => `
+      <div class="article-card" onclick="showPost('${p.path}','${p.title}','${p.date}')">
+        <h3>${p.title}</h3>
+        <div class="article-date">${p.date}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+async function showPost(path, title, date){
+  document.getElementById('list-view').style.display='none';
+  const postView = document.getElementById('post-view');
+  postView.style.display='block';
+  postView.innerHTML = '<div class="loading">加载中</div>';
+  try {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error();
+    const md = await res.text();
+    const clean = md.replace(/^---[\s\S]*?---\s*/, '');
+    const html = marked.parse(clean);
+    postView.innerHTML = `
+      <button class="back-btn" onclick="showList()">← 返回</button>
+      <div class="post-header">
+        <h1>${title}</h1>
+        <div class="post-meta">${date}</div>
+      </div>
+      <div class="post-content">${html}</div>
+    `;
+    window.scrollTo(0,0);
+  } catch(e){
+    postView.innerHTML = `
+      <button class="back-btn" onclick="showList()">← 返回</button>
+      <div class="post-header">
+        <h1>${title}</h1>
+        <div class="post-meta">${date}</div>
+      </div>
+      <p style="color:var(--text-soft)">文章加载失败，请检查文件：${path}</p >
+    `;
+  }
+}
+
+showList();
+</script>
+</body>
+</html>
