@@ -1,1 +1,75 @@
-this is tj rps
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hanabi2g4 的博客</title>
+<style>
+:root{
+  --bg:#ffffff; --text:#222; --card:#f7f7f7; --border:#e0e0e0; --primary:#3474e6;
+}
+[data-theme="dark"]{
+  --bg:#161b22; --text:#e8e8e8; --card:#21262d; --border:#373e47; --primary:#58a6ff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.8; transition:background 0.3s,color 0.3s;
+}
+header{
+  border-bottom:1px solid var(--border);
+  padding:20px max(16px,calc((100% - 860px)/2));
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+}
+.blog-title{font-size:22px; font-weight:700; color:var(--primary);}
+nav{display:flex; gap:14px; align-items:center;}
+nav a{color:var(--text); text-decoration:none; font-size:15px;}
+nav a:hover{color:var(--primary);}
+#themeBtn{
+  border:1px solid var(--border); background:var(--card); color:var(--text);
+  padding:6px 12px; border-radius:8px; cursor:pointer; font-size:14px;
+}
+.container{max-width:860px; margin:40px auto; padding:0 16px;}
+.article-card{
+  background:var(--card); border:1px solid var(--border);
+  padding:22px; border-radius:12px; margin-bottom:18px;
+  cursor:pointer; transition:transform .2s,border-color .2s;
+}
+.article-card:hover{transform:translateY(-3px); border-color:var(--primary);}
+.article-card h3{font-size:19px; margin-bottom:6px;}
+.article-date{font-size:13px; opacity:.65; margin-bottom:8px;}
+.article-summary{font-size:15px; opacity:.85;}
+.back-btn{
+  padding:8px 14px; border-radius:8px; border:1px solid var(--border);
+  background:var(--card); color:var(--text); cursor:pointer; margin-bottom:20px;
+}
+footer{
+  text-align:center; padding:28px; margin-top:60px;
+  border-top:1px solid var(--border); font-size:13px; opacity:.6;
+}
+hr{border:none; border-top:1px solid var(--border); margin:20px 0;}
+.post-content img{max-width:100%; border-radius:8px; margin:12px 0;}
+.post-content p{margin-bottom:14px;}
+.loading{opacity:.6; text-align:center; padding:40px 0;}
+</style>
+</head>
+<body>
+<header>
+  <div class="blog-title">hanabi2g4 的博客</div>
+  <nav>
+    <a href=" " onclick="showList();return false;">首页</a >
+    <button id="themeBtn">🌓 主题</button>
+  </nav>
+</header>
+
+<div class="container">
+  <div id="list-view">
+    <div class="loading">正在加载文章…</div>
+  </div>
+  <div id="post-view" style="display:none;"></div>
+</div>
+
+<footer>© 2026 hanabi2g4</footer>
+
+<script>
