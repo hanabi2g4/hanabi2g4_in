@@ -46,7 +46,7 @@ function main() {
     const summary = body.slice(0, 120);
 
     posts.push({
-      path: `_posts/${file}`,
+      path: `posts/${file}`,
       title: title,
       date: date,
       summary: summary
