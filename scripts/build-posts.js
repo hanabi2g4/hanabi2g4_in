@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const POSTS_DIR = '_posts';
+const POSTS_DIR = 'posts';
 const OUTPUT = 'posts.json';
 
 function parseFrontMatter(content) {
