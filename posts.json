@@ -1,6 +1,6 @@
 [
   {
-    "path": "posts/2026-10-05-in.md",
+    "path": "_posts/2026-10-05-in.md",
     "title": "introduce",
     "date": "2026-10-05",
     "summary": "正文标题\n\n这是文章的正文内容，写什么都行。\n\n支持 加粗、斜体、 列表等 Markdown 语法。\n\n 二级标题\n\n再来一段文字。"
